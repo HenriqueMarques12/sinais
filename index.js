@@ -16,7 +16,10 @@ async function fetchData() {
     try {
         console.log('Iniciando a busca de dados...');
         const response = await axios.get(API_URL);
-        const data = response.data.data; 
+
+        console.log('Resposta completa da API:', response);
+
+        const data = response.data ? response.data.data : null;
 
         console.log('Dados recebidos:', data);
 
@@ -53,7 +56,7 @@ async function sendTelegramMessage(message) {
         const response = await axios.post(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, {
             chat_id: CHAT_ID,
             text: message,
-            parse_mode: 'Markdown', 
+            parse_mode: 'Markdown',
         });
 
         console.log('Mensagem enviada para o Telegram:', response.data);

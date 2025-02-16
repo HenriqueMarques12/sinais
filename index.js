@@ -17,17 +17,18 @@ async function fetchData() {
         console.log('Iniciando a busca de dados...');
         const response = await axios.get(API_URL);
 
-        console.log('Resposta completa da API:', response);
+        console.log('Resposta completa da API:', response.data);
 
-        const data = response.data ? response.data.data : null;
+        const data = response.data && response.data.data ? response.data.data : null;
 
-        console.log('Dados recebidos:', data);
+        if (data) {
+            console.log('Dados recebidos:', data);
 
-        if (data && data.id !== lastId) {
-            lastId = data.id;
-            console.log('Novo sinal encontrado. Enviando notificação...');
+            if (data.id !== lastId) {
+                lastId = data.id;
+                console.log('Novo sinal encontrado. Enviando notificação...');
 
-            const message = `
+                const message = `
 📢 *Novo Sinal Disponível* 🚀
 
 📌 *Par:* ${data.par}
@@ -38,12 +39,15 @@ async function fetchData() {
 📊 *Resultado:* ${data.resultado ? data.resultado : 'Aguardando...'}
 
 ⚠️ *Aguardar confirmação!*
-            `;
+                `;
 
-            await sendTelegramMessage(message);
-            return data;
+                await sendTelegramMessage(message);
+                return data;
+            } else {
+                console.log('Nenhuma atualização encontrada.');
+            }
         } else {
-            console.log('Nenhuma atualização encontrada.');
+            console.log('Nenhum dado válido encontrado.');
         }
     } catch (error) {
         console.error('Erro ao buscar dados:', error.message);

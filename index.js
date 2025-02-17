@@ -35,10 +35,6 @@ async function fetchData() {
 📅 *Horário:* ${new Date(data.tempo).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}
 ⏳ *Expiração:* ${data.expiracao}
 📉 *Entrada:* ${data.acao}
-
-📊 *Resultado:* ${data.resultado ? data.resultado : 'Aguardando...'}
-
-⚠️ *Aguardar confirmação!*
                 `;
 
                 await sendTelegramMessage(message);

@@ -57,15 +57,37 @@ async function fetchData() {
 
 async function sendTelegramMessage(message) {
     try {
+        console.log('Enviando mensagem para o Telegram...');
         const response = await axios.post(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, {
             chat_id: CHAT_ID,
             text: message,
             parse_mode: 'Markdown',
         });
 
-        console.log('Mensagem enviada para o Telegram:', response.data);
+        console.log('Resposta do Telegram:', response.data);
+
+        if (response.data.ok) {
+            console.log('Mensagem enviada com sucesso!');
+        } else {
+            console.error('Falha ao enviar mensagem:', response.data.description);
+        }
     } catch (error) {
         console.error('Erro ao enviar mensagem para o Telegram:', error.message);
+    }
+}
+
+async function testTelegramConnection() {
+    try {
+        console.log('Enviando mensagem de teste para verificar a conexão...');
+        const response = await axios.post(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, {
+            chat_id: CHAT_ID,
+            text: "Teste de mensagem",
+            parse_mode: 'Markdown',
+        });
+
+        console.log('Resposta do Telegram:', response.data);
+    } catch (error) {
+        console.error('Erro ao enviar mensagem de teste para o Telegram:', error.message);
     }
 }
 
@@ -85,6 +107,8 @@ setInterval(() => {
     console.log('Executando fetchData a cada 60 segundos...');
     fetchData();
 }, 60000);
+
+testTelegramConnection();
 
 app.listen(PORT, () => {
     console.log(`Servidor rodando em http://localhost:${PORT}`);
